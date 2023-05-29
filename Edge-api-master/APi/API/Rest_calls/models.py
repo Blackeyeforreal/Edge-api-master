@@ -38,7 +38,10 @@ class Challenges(models.Model):
     pitch_type = models.CharField(max_length= 23)
     is_accepted = models.BooleanField(default=False)
     challenge_id = models.AutoField(primary_key=True)
-
+    user_id= models.ForeignKey("Users", on_delete=models.CASCADE)
+    user_name =  models.CharField(max_length= 23)
+    challenger_team_name = models.CharField(max_length= 23)
+    challenged_team_name = models.CharField(max_length= 23)
 
 class CricketPlayer(models.Model):
     Name = models.CharField(max_length=34)

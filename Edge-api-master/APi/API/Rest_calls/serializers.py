@@ -95,7 +95,8 @@ class GroupSerializer (serializers.ModelSerializer):
 class ChallengeSerializer (serializers.ModelSerializer):
     class Meta:
         model = Challenges
-        fields = ['challenger_team_id','challenged_team_id','pitch_type', 'date_and_time','challenge_id']
+        fields = ['challenger_team_id','challenged_team_id','pitch_type', 'date_and_time','challenge_id','user_name',
+    'challenger_team_name', 'challenged_team_name', 'user_id']
 
 
 
@@ -103,7 +104,7 @@ class TeamSerializer (serializers.ModelSerializer):
     class Meta:
         model = CricketTeam
         # comeplete this function with model and make mirgation and in total
-        fields = ['teamName','country','id', 'userName']
+        fields = ['teamName','country','id', 'userName','userId']
         #
                 
 

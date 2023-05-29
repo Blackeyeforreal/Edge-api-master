@@ -118,7 +118,7 @@ class CreatTeam(APIView):
     def team( request, format = "jpg"):
         print("worked fine")
         if request.method == 'POST' or request.method== 'PUT':
-            request.data["userId"] = request.user
+            request.data["userId"] = request.user.id
             request.data['userName']= request.user.name
             serializer = TeamSerializer(data=request.data)
 
@@ -133,12 +133,33 @@ class CreatTeam(APIView):
                 serializer.save()
                 team= CricketTeam.objects.filter(teamName = teamName  )
                 team[0].userName = request.user.name
+                #team[0].userId = request.user
                 print(team[0].userName,request.user.name)
                 
                 team[0].save()
                # team.teamImage = request.FILES['file']
-                F_name = [" john, william"]
-                S_name = ['stark', 'river wood ']
+                F_name =[ 'John', 'Emma', 'Oliver', 'Ava', 'William', 'Sophia', 'James', 'Isabella', 'Benjamin', 'Mia',
+                'Lucas', 'Charlotte', 'Henry', 'Amelia', 'Alexander', 'Harper', 'Michael', 'Evelyn', 'Daniel', 'Abigail',
+                'Elijah', 'Emily', 'Matthew', 'Elizabeth', 'Joseph', 'Sofia', 'David', 'Avery', 'Samuel', 'Ella',
+                'Jackson', 'Scarlett', 'Sebastian', 'Grace', 'Jack', 'Chloe', 'Andrew', 'Victoria', 'Owen', 'Riley',
+                'Joseph', 'Luna', 'Gabriel', 'Lily', 'Anthony', 'Layla', 'Carter', 'Penelope', 'Jayden', 'Zoey',
+                'Dylan', 'Nora', 'Luke', 'Lillian', 'Henry', 'Zoe', 'Isaac', 'Mila', 'Wyatt', 'Aria',
+                'Caleb', 'Eleanor', 'Nathan', 'Hannah', 'Ryan', 'Aubrey', 'Adrian', 'Addison', 'Christian', 'Stella',
+                'Mason', 'Natalie', 'Eli', 'Leah', 'Jonathan', 'Willow', 'Landon', 'Lucy', 'Julian', 'Savannah',
+                'Hunter', 'Brooklyn', 'Aaron', 'Audrey', 'Charles', 'Claire', 'Evan', 'Hazel', 'Thomas', 'Aaliyah',
+                'Nicholas', 'Skylar', 'Isaiah', 'Ellie', 'Adam', 'Violet', 'Alex', 'Bella', 'Josiah', 'Aurora'
+                ]
+                S_name = [
+                'Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor',
+                'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson',
+                'Clark', 'Rodriguez', 'Lewis', 'Lee', 'Walker', 'Hall', 'Allen', 'Young', 'Hernandez', 'King',
+                'Wright', 'Lopez', 'Hill', 'Scott', 'Green', 'Adams', 'Baker', 'Gonzalez', 'Nelson', 'Carter',
+                'Mitchell', 'Perez', 'Roberts', 'Turner', 'Phillips', 'Campbell', 'Parker', 'Evans', 'Edwards', 'Collins',
+                'Stewart', 'Sanchez', 'Morris', 'Rogers', 'Reed', 'Cook', 'Morgan', 'Bell', 'Murphy', 'Bailey',
+                'Rivera', 'Cooper', 'Richardson', 'Cox', 'Howard', 'Ward', 'Torres', 'Peterson', 'Gray', 'Ramirez',
+                'James', 'Watson', 'Brooks', 'Kelly', 'Sanders', 'Price', 'Bennett', 'Wood', 'Barnes', 'Ross',
+                'Henderson', 'Coleman', 'Jenkins', 'Perry', 'Powell', 'Long', 'Patterson', 'Hughes', 'Flores', 'Washington',
+                'Butler',]
                 TeamID = team[0]
 
                 for batsmen in range(1,8):
@@ -187,6 +208,7 @@ class CreatTeam(APIView):
     def viewPlayers(request   ):
         if request.method == 'GET':
             #team = CreatTeam.objects.filter( userId = request.user)
+            print(request.user)
             teamMembers  = CricketPlayer.objects.filter(TeamId =CricketTeam.objects.get(userId = request.user) )
             print(teamMembers)
             
@@ -424,17 +446,16 @@ class GamePlay(APIView):
     def challenge(request):
         if request.method=='POST':
             teamId = CricketTeam.objects.get(userId = request.user)
+            teamId2 = CricketTeam.objects.get(id = request.data["challenged_team_id"]) 
             request.data["challenger_team_id"] = teamId.id
+            request.data["user_name"] = request.user.name
+            request.data["challenger_team_name"] = teamId.teamName
+            request.data["challenged_team_name"] = teamId2.teamName
+            request.data["user_id"] = request.user.id
             serializer = ChallengeSerializer(data=request.data,context={'request': request})  
             serializer.is_valid(raise_exception=True) 
             if serializer.is_valid():
                 serializer.save()
-                CricketPlayer(team.id )
-
-                
-
-            
-        
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 print(serializer.errors)
