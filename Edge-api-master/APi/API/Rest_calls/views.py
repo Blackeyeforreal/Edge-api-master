@@ -395,7 +395,7 @@ class GamePlay(APIView):
                     break 
 
 
-            oldtarget = target
+            oldtarget =  current_runs
             
           
 
